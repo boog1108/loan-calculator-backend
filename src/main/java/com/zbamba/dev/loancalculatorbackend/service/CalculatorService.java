@@ -60,7 +60,7 @@ public class CalculatorService {
      *                           <code>MAX_LOAN_AMOUNT</code> inclusive or in increments of <code>LOAN_AMOUNT_INCREMENT</code>
      *                           or <code>loanAmountAsString</code> has a leading character of <code>0</code> or <code>+</code>.
      */
-    private int getLoanAmount(final String loanAmountAsString) throws LoanQuoteParameterValidationException {
+    public int getLoanAmount(final String loanAmountAsString) throws LoanQuoteParameterValidationException {
         // validate loan amount
         final int loanAmount;
 
