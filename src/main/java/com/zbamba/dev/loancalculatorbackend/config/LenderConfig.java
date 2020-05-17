@@ -10,10 +10,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.util.FileCopyUtils;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Configuration
@@ -28,15 +29,11 @@ public class LenderConfig {
     @Bean(name = "lenders")
     public List<Lender> getLenders() throws LoanQuoteParameterValidationException, IOException {
         // first argument is market.csv, ensure that it is a file
-        final FileReader marketFileReader;
+        final InputStreamReader marketFileReader;
 
-        Resource marketFile = new ClassPathResource(MARKET_FILE_PATH);
+        InputStream marketFile = new ClassPathResource(MARKET_FILE_PATH).getInputStream();
 
-        try {
-            marketFileReader = new FileReader(marketFile.getFile());
-        } catch (FileNotFoundException e) {
-            throw new LoanQuoteParameterValidationException("Invalid market file: " + (marketFile.getFile().getPath()));
-        }
+        marketFileReader = new InputStreamReader(marketFile, StandardCharsets.UTF_8);
 
         // parse the market.csv
         final List<Lender> lenders;
@@ -48,6 +45,7 @@ public class LenderConfig {
                     .withThrowExceptions(true)
                     .build()
                     .parse();
+            System.out.println("lenders size: " + lenders.size());
             return lenders;
         } catch (RuntimeException e) {
             throw new LoanQuoteParameterValidationException("Unable to parse invalid market file: " + e.getMessage(), e);
