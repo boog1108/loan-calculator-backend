@@ -46,6 +46,12 @@ public class LenderConfig {
                     .build()
                     .parse();
             System.out.println("lenders size: " + lenders.size());
+            lenders.forEach(lender -> {
+                System.out.println("##############");
+                System.out.println(lender.getName());
+                System.out.println(lender.getAmount());
+                System.out.println(lender.getRate());
+            });
             return lenders;
         } catch (RuntimeException e) {
             throw new LoanQuoteParameterValidationException("Unable to parse invalid market file: " + e.getMessage(), e);
